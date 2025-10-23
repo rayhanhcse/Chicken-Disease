@@ -1,140 +1,186 @@
-# Chicken-Disease
+# 🐔 Chicken‑Disease
 
-# End-to-End-Deep-Learning-Project
+### 🎯 *End‑to‑End Deep Learning Project*
 
+An **AI-powered deep learning project** for detecting chicken diseases — featuring full **data pipeline**, **web app**, and **AWS CI/CD** deployment.
 
-#### Data Link: [Donwload Link](https://drive.google.com/file/d/1pV0DAdyjzsjk0HL7f8_5qiS_mVyjYk25/view?usp=sharing)
+---
 
-## Workflows
+## 🌐 Dataset
 
-1. Update config.yaml
-3. Update params.yaml
-4. Update the entity
-5. Update the configuration manager in src config
-6. Update the components
-7. Update the pipeline 
-8. Update the main.py
-9. Update the app.py
+**Data Link:** [📦 Download Dataset](https://drive.google.com/file/d/1pV0DAdyjzsjk0HL7f8_5qiS_mVyjYk25/view?usp=sharing)
 
+---
 
+## 🧠 Workflows
 
+1. Update `config.yaml`
+2. Update `params.yaml`
+3. Update the entity
+4. Update the configuration manager in `src/config`
+5. Update the components
+6. Update the pipeline
+7. Update `main.py`
+8. Update `app.py`
 
-# How to run?
-### STEPS:
+---
 
-Clone the repository
+## ⚙️ How to Run
+
+### 1️⃣ Clone Repository
 
 ```bash
-https://github.com/rayhanhcse/Chicken-Disease.git
+git clone https://github.com/rayhanhcse/Chicken-Disease.git
+cd Chicken-Disease
 ```
-### STEP 01- Create a conda environment after opening the repository
+
+### 2️⃣ Create Conda Environment
 
 ```bash
 conda create -n chicken python=3.8 -y
-```
-
-```bash
 conda activate chicken
 ```
 
+### 3️⃣ Install Dependencies
 
-### STEP 02- install the requirements
 ```bash
 pip install -r requirements.txt
 ```
 
+### 4️⃣ Export AWS Credentials (Optional)
 
-### Export the environment
 ```bash
-export AWS_ACCESS_KEY_ID="YOUR_ACCESS_KEY_ID""
+export AWS_ACCESS_KEY_ID="YOUR_ACCESS_KEY_ID"
 export AWS_SECRET_ACCESS_KEY="YOUR_SECRET_ACCESS_KEY"
-
 ```
 
+### 5️⃣ Run Application
 
 ```bash
-# Finally run the following command
 python app.py
 ```
 
-Now,
-```bash
-open up you local host and port
+Now open your local host and port in browser.
+
+---
+
+## ☁️ AWS CI/CD Deployment (with GitHub Actions)
+
+### Step 1: Login to AWS Console
+
+### Step 2: Create IAM User
+
+**Permissions:**
+
+* EC2 Access (Virtual Machine)
+* ECR Access (Elastic Container Registry)
+
+**Policies:**
+
+* `AmazonEC2ContainerRegistryFullAccess`
+* `AmazonEC2FullAccess`
+
+### Step 3: Create ECR Repository
+
+```text
+315865595366.dkr.ecr.us-east-1.amazonaws.com/chicken
 ```
 
+### Step 4: Create EC2 Instance (Ubuntu)
 
+### Step 5: Install Docker
 
+```bash
+sudo apt-get update -y
+sudo apt-get upgrade -y
+curl -fsSL https://get.docker.com -o get-docker.sh
+sudo sh get-docker.sh
+sudo usermod -aG docker ubuntu
+newgrp docker
+```
 
-# AWS-CICD-Deployment-with-Github-Actions
+### Step 6: Configure EC2 as Self‑Hosted Runner
 
-## 1. Login to AWS console.
+`GitHub → Settings → Actions → Runner → New Self-Hosted Runner`
 
-## 2. Create IAM user for deployment
+### Step 7: Setup GitHub Secrets
 
-	#with specific access
+| Secret Key            | Example                                       |
+| --------------------- | --------------------------------------------- |
+| AWS_ACCESS_KEY_ID     | YOUR_ACCESS_KEY_ID                            |
+| AWS_SECRET_ACCESS_KEY | YOUR_SECRET_ACCESS_KEY                        |
+| AWS_REGION            | us-east-1                                     |
+| AWS_ECR_LOGIN_URI     | 566373416292.dkr.ecr.ap-south-1.amazonaws.com |
+| ECR_REPOSITORY_NAME   | chicken                                       |
 
-	1. EC2 access : It is virtual machine
+---
 
-	2. ECR: Elastic Container registry to save your docker image in aws
+## 🐳 Docker Deployment
 
+```bash
+# Login to ECR
+aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ECR_LOGIN_URI
 
-	#Description: About the deployment
+# Build and push image
+docker build -t chicken .
+docker tag chicken:latest $AWS_ECR_LOGIN_URI/chicken:latest
+docker push $AWS_ECR_LOGIN_URI/chicken:latest
+```
 
-	1. Build docker image of the source code
+### On EC2:
 
-	2. Push your docker image to ECR
+```bash
+docker pull $AWS_ECR_LOGIN_URI/chicken:latest
+docker run -d -p 80:5000 $AWS_ECR_LOGIN_URI/chicken:latest
+```
 
-	3. Launch Your EC2 
+---
 
-	4. Pull Your image from ECR in EC2
+## 🚀 GitHub Actions (Workflow Example)
 
-	5. Lauch your docker image in EC2
+```yaml
+name: CI/CD - Deploy to AWS
+on:
+  push:
+    branches: [ main ]
 
-	#Policy:
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+      - name: Login to ECR
+        run: aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.AWS_ECR_LOGIN_URI }}
+      - name: Build, Tag & Push Image
+        run: |
+          docker build -t ${{ secrets.ECR_REPOSITORY_NAME }}:latest .
+          docker tag ${{ secrets.ECR_REPOSITORY_NAME }}:latest ${{ secrets.AWS_ECR_LOGIN_URI }}/${{ secrets.ECR_REPOSITORY_NAME }}:latest
+          docker push ${{ secrets.AWS_ECR_LOGIN_URI }}/${{ secrets.ECR_REPOSITORY_NAME }}:latest
+```
 
-	1. AmazonEC2ContainerRegistryFullAccess
+---
 
-	2. AmazonEC2FullAccess
+## 💡 Tips & Troubleshooting
 
-	
-## 3. Create ECR repo to store/save docker image
-    - Save the URI: 315865595366.dkr.ecr.us-east-1.amazonaws.com/chicken
+* **Port already in use?** → Change the port or kill existing process.
+* **Docker not found?** → Reconnect your EC2 session after `usermod`.
+* **ECR login errors?** → Verify AWS credentials and region.
 
-	
-## 4. Create EC2 machine (Ubuntu) 
+---
 
-## 5. Open EC2 and Install docker in EC2 Machine:
-	
-	
-	#optinal
+## 👨‍💻 Author
 
-	sudo apt-get update -y
+**Rayhan Hussain**
+📧 [LinkedIn Profile](https://linkedin.com/in/rayhanchse)
+🐙 [GitHub](https://github.com/rayhanhcse)
 
-	sudo apt-get upgrade
-	
-	#required
+---
 
-	curl -fsSL https://get.docker.com -o get-docker.sh
-
-	sudo sh get-docker.sh
-
-	sudo usermod -aG docker ubuntu
-
-	newgrp docker
-	
-# 6. Configure EC2 as self-hosted runner:
-    setting>actions>runner>new self hosted runner> choose os> then run command one by one
-
-
-# 7. Setup github secrets:
-
-    AWS_ACCESS_KEY_ID=
-
-    AWS_SECRET_ACCESS_KEY=
-
-    AWS_REGION = us-east-1
-
-    AWS_ECR_LOGIN_URI = demo>>  566373416292.dkr.ecr.ap-south-1.amazonaws.com
-
-    ECR_REPOSITORY_NAME = simple-app
-
+### 🌈 *Made with ❤️ by Rayhan Hussain — turning code into innovation!*
