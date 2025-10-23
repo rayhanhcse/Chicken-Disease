@@ -1,10 +1,29 @@
-# 🐔 Chicken‑Disease
+<h1 align="center">
+  <span style="background: linear-gradient(to right, #1e3c72, #2a5298); -webkit-background-clip: text; color: transparent;">
+    🐔 Chicken-Disease Project
+  </span>
+</h1>
 
-### 🎯 *End‑to‑End Deep Learning Project*
+<p align="center">
+  <strong>Detect common chicken diseases using Deep Learning & deploy via AWS CI/CD</strong>
+</p>
 
-An **AI-powered deep learning project** for detecting chicken diseases — featuring full **data pipeline**, **web app**, and **AWS CI/CD** deployment.
+<p align="center">
+  <a href="https://github.com/rayhanhcse/">
+    <img src="https://img.shields.io/badge/GitHub-rayhanhcse-181717?style=for-the-badge&logo=github" alt="GitHub Badge"/>
+  </a>
+  <a href="mailto:rayhanhcse@gmail.com">
+    <img src="https://img.shields.io/badge/Email-rayhanhcse@gmail.com-D14836?style=for-the-badge&logo=gmail" alt="Email Badge"/>
+  </a>
+  <a href="https://linkedin.com/in/rayhanchse">
+    <img src="https://img.shields.io/badge/LinkedIn-rayhanchse-0077B5?style=for-the-badge&logo=linkedin" alt="LinkedIn Badge"/>
+  </a>
+  <img src="https://img.shields.io/badge/Python-3.8-3776AB?style=for-the-badge&logo=python" alt="Python Badge"/>
+  <img src="https://img.shields.io/badge/Anaconda-202020?style=for-the-badge&logo=anaconda" alt="Anaconda Badge"/>
+</p>
 
 ---
+
 
 ## 🌐 Dataset
 
