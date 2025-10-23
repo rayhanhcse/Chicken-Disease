@@ -1,238 +1,186 @@
-<h1 align="center">🎯 <span style="background:linear-gradient(90deg,#ff7eb3,#81f7d8);-webkit-background-clip:text;color:transparent;">Chicken‑Disease</span></h1>
+# 🐔 Chicken‑Disease
 
-<p align="center">An end‑to‑end deep learning project to detect common chicken diseases with a web app and AWS CI/CD deployment 🚀</p>
+### 🎯 *End‑to‑End Deep Learning Project*
 
----
-
-<p align="center">
-  <a href="#features">✨ Features</a> ·
-  <a href="#quick-start">⚡ Quick Start</a> ·
-  <a href="#aws-cicd">☁️ AWS CI/CD</a> ·
-  <a href="#contributing">🤝 Contributing</a>
-</p>
+An **AI-powered deep learning project** for detecting chicken diseases — featuring full **data pipeline**, **web app**, and **AWS CI/CD** deployment.
 
 ---
 
-## 🔥 Highlights
+## 🌐 Dataset
 
-* End-to-end pipeline: data → preprocessing → training → evaluation → deployment
-* Simple web app (`app.py`) to run inference locally
-* Dockerized for reproducible deployment
-* GitHub Actions → ECR → EC2 self-hosted runner CI/CD flow
-* Config-driven (`config.yaml`, `params.yaml`) for easy experimentation
-
-## 📁 Repository
-
-```
-Chicken-Disease/
-├─ src/
-├─ config.yaml
-├─ params.yaml
-├─ requirements.txt
-├─ app.py
-├─ main.py
-├─ Dockerfile
-└─ README.md
-```
-
-## 📥 Data
-
-**Data Link:** [Download dataset (Google Drive)](https://drive.google.com/file/d/1pV0DAdyjzsjk0HL7f8_5qiS_mVyjYk25/view?usp=sharing)
-
-> Place the downloaded data inside `data/` (make `data/raw` if not present).
+**Data Link:** [📦 Download Dataset](https://drive.google.com/file/d/1pV0DAdyjzsjk0HL7f8_5qiS_mVyjYk25/view?usp=sharing)
 
 ---
 
-## 🧭 Table of Contents
+## 🧠 Workflows
 
-1. [Quick Start](#quick-start)
-2. [Configuration](#configuration)
-3. [Project Structure & Workflows](#workflows)
-4. [Local Run](#local-run)
-5. [Docker & AWS CI/CD](#aws-cicd)
-6. [Tips & Troubleshooting](#tips)
-7. [Contributing](#contributing)
-8. [License & Contact](#license)
+1. Update `config.yaml`
+2. Update `params.yaml`
+3. Update the entity
+4. Update the configuration manager in `src/config`
+5. Update the components
+6. Update the pipeline
+7. Update `main.py`
+8. Update `app.py`
 
 ---
 
-## ⚡ Quick Start
+## ⚙️ How to Run
 
-**1. Clone**
+### 1️⃣ Clone Repository
 
 ```bash
 git clone https://github.com/rayhanhcse/Chicken-Disease.git
 cd Chicken-Disease
 ```
 
-**2. Create conda env**
+### 2️⃣ Create Conda Environment
 
 ```bash
 conda create -n chicken python=3.8 -y
 conda activate chicken
+```
+
+### 3️⃣ Install Dependencies
+
+```bash
 pip install -r requirements.txt
 ```
 
-**3. Update configs**
-
-* `config.yaml` — pipeline and path settings
-* `params.yaml` — training hyperparameters
-
-**4. Export (optional) AWS creds for CI/CD**
+### 4️⃣ Export AWS Credentials (Optional)
 
 ```bash
 export AWS_ACCESS_KEY_ID="YOUR_ACCESS_KEY_ID"
 export AWS_SECRET_ACCESS_KEY="YOUR_SECRET_ACCESS_KEY"
-export AWS_REGION="us-east-1"
 ```
 
-**5. Run app**
+### 5️⃣ Run Application
 
 ```bash
 python app.py
 ```
 
-Open your browser at `http://127.0.0.1:5000` (or the printed host/port).
+Now open your local host and port in browser.
 
 ---
 
-## 🛠 Configuration
+## ☁️ AWS CI/CD Deployment (with GitHub Actions)
 
-* `config.yaml` — central configuration manager. Keep paths and artifact locations here.
-* `params.yaml` — training hyperparameters (epochs, batch_size, lr, augmentations).
-* `src/config/*` — code that reads these files and builds objects used by components.
+### Step 1: Login to AWS Console
 
-**Recommended change flow**
+### Step 2: Create IAM User
 
-1. Update `config.yaml`
-2. Update `params.yaml`
-3. Update `src/entity` (dataclasses)
-4. Update `src/config/configuration_manager.py`
-5. Update components in `src/components/` (data, model, trainer)
-6. Update `src/pipeline.py` to orchestrate
-7. Run `main.py` or `app.py` for web
+**Permissions:**
 
----
+* EC2 Access (Virtual Machine)
+* ECR Access (Elastic Container Registry)
 
-## 🔁 Workflows (short)
-
-1. Update `config.yaml`
-2. Update `params.yaml`
-3. Update domain entities (`src/entity`)
-4. Update configuration manager (`src/config`)
-5. Implement/modify components (`src/components`)
-6. Update pipeline (`src/pipeline.py`)
-7. Update `main.py` for CLI/train runs and `app.py` for the web app
-
----
-
-## 🐳 Docker & AWS CI/CD (modernized)
-
-### Overview
-
-1. Build Docker image locally or in CI
-2. Push image to AWS ECR
-3. Deploy to EC2 (self-hosted runner) or ECS
-4. Use GitHub Actions to automate build → push → deploy
-
-### Minimal IAM policies for deploy user
+**Policies:**
 
 * `AmazonEC2ContainerRegistryFullAccess`
 * `AmazonEC2FullAccess`
 
-**NOTE:** For production tighten permissions to only the resources needed.
+### Step 3: Create ECR Repository
 
-### Recommended secrets (GitHub)
-
-* `AWS_ACCESS_KEY_ID`
-* `AWS_SECRET_ACCESS_KEY`
-* `AWS_REGION` (e.g. `us-east-1`)
-* `AWS_ECR_LOGIN_URI` (e.g. `123456789012.dkr.ecr.us-east-1.amazonaws.com`)
-* `ECR_REPOSITORY_NAME` (e.g. `chicken`)
-
-### Quick commands (EC2)
-
-```bash
-# install docker
-curl -fsSL https://get.docker.com -o get-docker.sh
-sudo sh get-docker.sh
-sudo usermod -aG docker $USER
-newgrp docker
-
-# login to ECR (from CI or local with awscli)
-aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ECR_LOGIN_URI
-
-# build and push
-docker build -t $ECR_REPOSITORY_NAME:latest .
-docker tag $ECR_REPOSITORY_NAME:latest $AWS_ECR_LOGIN_URI/$ECR_REPOSITORY_NAME:latest
-docker push $AWS_ECR_LOGIN_URI/$ECR_REPOSITORY_NAME:latest
-
-# on EC2
-docker pull $AWS_ECR_LOGIN_URI/$ECR_REPOSITORY_NAME:latest
-docker run -d --restart always -p 80:5000 $AWS_ECR_LOGIN_URI/$ECR_REPOSITORY_NAME:latest
+```text
+315865595366.dkr.ecr.us-east-1.amazonaws.com/chicken
 ```
 
-### GitHub Actions (example snippet)
+### Step 4: Create EC2 Instance (Ubuntu)
 
-Create `.github/workflows/deploy.yml` with a simple pipeline:
+### Step 5: Install Docker
+
+```bash
+sudo apt-get update -y
+sudo apt-get upgrade -y
+curl -fsSL https://get.docker.com -o get-docker.sh
+sudo sh get-docker.sh
+sudo usermod -aG docker ubuntu
+newgrp docker
+```
+
+### Step 6: Configure EC2 as Self‑Hosted Runner
+
+`GitHub → Settings → Actions → Runner → New Self-Hosted Runner`
+
+### Step 7: Setup GitHub Secrets
+
+| Secret Key            | Example                                       |
+| --------------------- | --------------------------------------------- |
+| AWS_ACCESS_KEY_ID     | YOUR_ACCESS_KEY_ID                            |
+| AWS_SECRET_ACCESS_KEY | YOUR_SECRET_ACCESS_KEY                        |
+| AWS_REGION            | us-east-1                                     |
+| AWS_ECR_LOGIN_URI     | 566373416292.dkr.ecr.ap-south-1.amazonaws.com |
+| ECR_REPOSITORY_NAME   | chicken                                       |
+
+---
+
+## 🐳 Docker Deployment
+
+```bash
+# Login to ECR
+aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ECR_LOGIN_URI
+
+# Build and push image
+docker build -t chicken .
+docker tag chicken:latest $AWS_ECR_LOGIN_URI/chicken:latest
+docker push $AWS_ECR_LOGIN_URI/chicken:latest
+```
+
+### On EC2:
+
+```bash
+docker pull $AWS_ECR_LOGIN_URI/chicken:latest
+docker run -d -p 80:5000 $AWS_ECR_LOGIN_URI/chicken:latest
+```
+
+---
+
+## 🚀 GitHub Actions (Workflow Example)
 
 ```yaml
-name: CI/CD - Build & Push to ECR
+name: CI/CD - Deploy to AWS
 on:
   push:
     branches: [ main ]
 
 jobs:
-  build-and-push:
+  build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: aws-actions/configure-aws-credentials@v2
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
       - name: Login to ECR
-        run: |
-          aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.AWS_ECR_LOGIN_URI }}
-      - name: Build, Tag, Push
+        run: aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.AWS_ECR_LOGIN_URI }}
+      - name: Build, Tag & Push Image
         run: |
           docker build -t ${{ secrets.ECR_REPOSITORY_NAME }}:latest .
           docker tag ${{ secrets.ECR_REPOSITORY_NAME }}:latest ${{ secrets.AWS_ECR_LOGIN_URI }}/${{ secrets.ECR_REPOSITORY_NAME }}:latest
           docker push ${{ secrets.AWS_ECR_LOGIN_URI }}/${{ secrets.ECR_REPOSITORY_NAME }}:latest
 ```
 
-> For full deploy automation add a second job (or runner) that SSHs to EC2 / triggers webhook to pull the new image and restart the container.
+---
+
+## 💡 Tips & Troubleshooting
+
+* **Port already in use?** → Change the port or kill existing process.
+* **Docker not found?** → Reconnect your EC2 session after `usermod`.
+* **ECR login errors?** → Verify AWS credentials and region.
 
 ---
 
-## ✅ Tips & Troubleshooting
+## 👨‍💻 Author
 
-* If `app.py` shows `port in use`: change the port in the code or kill the process.
-* If Docker not found on EC2: ensure the `usermod` and `newgrp` steps were applied and you reconnected the session.
-* AWS ECR auth errors: confirm `AWS_REGION` and `AWS_ECR_LOGIN_URI` values in GitHub secrets.
-
----
-
-## ✍️ Contributing
-
-1. Fork the repo
-2. Create a feature branch `git checkout -b feat/awesome-thing`
-3. Make changes, add tests where applicable
-4. Create a PR describing why this improves the project
+**Rayhan Hussain**
+📧 [LinkedIn Profile](https://linkedin.com/in/rayhanchse)
+🐙 [GitHub](https://github.com/rayhanhcse)
 
 ---
 
-## 📜 License
-
-This project is available under the MIT License.
-
----
-
-## 📬 Contact
-
-Rayhan Hussain — `rayhanhcse` on GitHub
-
----
-
-*Made with ♥ and balanced gradients.*
+### 🌈 *Made with ❤️ by Rayhan Hussain — turning code into innovation!*
