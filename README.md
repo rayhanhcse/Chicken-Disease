@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/rayhanhcse/Chicken-Disease">
+  <a href="https://github.com/rayhanhcse/">
     <img src="https://img.shields.io/badge/GitHub-rayhanhcse-181717?style=for-the-badge&logo=github" alt="GitHub Badge"/>
   </a>
   <a href="mailto:rayhanhcse@gmail.com">
