@@ -202,4 +202,4 @@ jobs:
 
 ---
 
-### 🌈 *Made with ❤️ by Rayhan Hussain — turning code into innovation!*
+###  *Made with ❤️ by Rayhan Hussain — turning code into innovation!*
