@@ -102,7 +102,7 @@ Now open your local host and port in browser.
 ### Step 3: Create ECR Repository
 
 ```text
-315865595366.dkr.ecr.us-east-1.amazonaws.com/chicken
+465607862901.dkr.ecr.us-east-1.amazonaws.com/chicken
 ```
 
 ### Step 4: Create EC2 Instance (Ubuntu)
