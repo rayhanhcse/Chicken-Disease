@@ -1,542 +1,234 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Chicken Disease — colorful</title>
-
-  <!-- icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" />
-
-  <style>
-    :root{
-      --bg: linear-gradient(180deg,#eef4ff 0%, #fbfcff 100%);
-      --card-bg: rgba(255,255,255,0.85);
-      --glass: rgba(255,255,255,0.6);
-      --muted: #6c757d;
-      --radius:14px;
-      --brand: #1b2d6b;
-      --accent: #00a3ff;
-    }
-    html,body{height:100%; margin:0; font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial; color:#111;}
-    body{background:var(--bg); padding:26px 16px;}
-
-    .stage { max-width:1100px; margin:0 auto; }
-
-    .card {
-      background: var(--card-bg);
-      border-radius: var(--radius);
-      box-shadow: 0 10px 40px rgba(20,30,60,0.07);
-      padding:18px;
-      overflow:hidden;
-      backdrop-filter: blur(6px) saturate(120%);
-    }
-
-    header.app-head { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:12px;}
-    header h1 { margin:0; font-size:20px; color:var(--brand); display:flex; gap:10px; align-items:center;}
-    header .meta { color:var(--muted); font-size:13px; }
-
-    .themes { display:flex; gap:8px; align-items:center; }
-
-    .row { display:flex; gap:18px; flex-wrap:wrap; }
-    .col { flex:1 1 0; min-width:280px; }
-
-    /* preview */
-    .preview {
-      border-radius:12px;
-      height:380px;
-      display:flex; align-items:center; justify-content:center;
-      border:2px dashed rgba(27,45,107,0.08);
-      background: linear-gradient(180deg, rgba(255,255,255,0.6), rgba(255,255,255,0.35));
-      position:relative; overflow:hidden;
-    }
-    .preview.drag-over { border-style:solid; box-shadow: 0 10px 30px rgba(0,163,255,0.06) inset; }
-    .preview img, .preview video { width:100%; height:100%; object-fit:cover; display:block; }
-
-    .placeholder { text-align:center; color:var(--muted); }
-    .controls { display:flex; gap:8px; margin-top:12px; flex-wrap:wrap; align-items:center; }
-
-    /* buttons */
-    .btn {
-      border: none;
-      padding:10px 14px;
-      border-radius:10px;
-      cursor:pointer;
-      display:inline-flex; gap:8px; align-items:center;
-      font-weight:600;
-    }
-    .btn:disabled { opacity:0.6; cursor:not-allowed; }
-    .btn-outline { background:transparent; border:1px solid rgba(27,45,107,0.08); color:var(--brand); }
-    .btn-primary { background:var(--brand); color:white; box-shadow: 0 6px 18px rgba(27,45,107,0.12); }
-    .btn-accent { background:var(--accent); color:white; box-shadow: 0 6px 18px rgba(0,163,255,0.12); }
-    .btn-danger { background:#ff5b6e; color:white; }
-
-    .result {
-      border-radius:12px;
-      padding:12px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(250,250,255,0.85));
-      box-shadow: 0 8px 24px rgba(20,30,60,0.04);
-      min-height:380px;
-    }
-
-    pre.jsonRes { max-height:200px; overflow:auto; background:#0b1220; color:#e8f1ff; padding:12px; border-radius:8px; font-size:13px; }
-
-    .pred-item { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:10px; }
-    .bar { height:10px; background:rgba(27,45,107,0.06); border-radius:8px; overflow:hidden; width:60%; }
-    .bar-fill { height:100%; width:0%; background:linear-gradient(90deg,var(--accent),var(--brand)); transition:width .6s ease; }
-
-    .footer { text-align:center; color:var(--muted); font-size:13px; margin-top:14px; }
-
-    /* theme swatches */
-    .swatch { width:36px; height:36px; border-radius:8px; cursor:pointer; border:2px solid rgba(0,0,0,0.06); display:inline-block; }
-    .swatch.active { outline:3px solid rgba(0,0,0,0.06); transform:translateY(-2px); }
-
-    /* neon glow utility */
-    .glow { box-shadow: 0 6px 30px rgba(0,200,255,0.12); }
-
-    /* responsive */
-    @media (max-width:900px) {
-      .row { flex-direction:column; }
-      .preview { height:260px; }
-    }
-
-    /* theme specifics (initially set to blended theme) */
-    /* A: Neon */
-    .theme-A { --brand: #6a00ff; --accent: #00e0ff; --card-bg: linear-gradient(180deg, rgba(10,6,20,0.9), rgba(15,8,35,0.85)); --bg: linear-gradient(180deg,#06021a 0%, #071733 100%); color:#e6f7ff; }
-    /* B: Pastel */
-    .theme-B { --brand: #6b4cff; --accent: #ff9ad1; --card-bg: linear-gradient(180deg, rgba(255,255,255,0.85), rgba(250,246,255,0.75)); --bg: linear-gradient(180deg,#f8fbff 0%, #fff6fb 100%); color:#222;}
-    /* C: Material */
-    .theme-C { --brand: #0f62fe; --accent: #ff7a59; --card-bg: rgba(255,255,255,0.92); --bg: linear-gradient(180deg,#f4f6fb, #ffffff); }
-    /* D: Vibrant */
-    .theme-D { --brand: #ff3b3b; --accent: #ffb11b; --card-bg: linear-gradient(180deg,#fff9f6,#fff4ef); --bg: linear-gradient(180deg,#fff7f0,#fffaf7); }
-    /* E: Custom will set CSS variables dynamically */
-
-    /* small helpers */
-    .muted { color:var(--muted); }
-    .tiny { font-size:12px; color:var(--muted); }
-    .center { text-align:center; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>cnncls</title>
+	<link rel="shortcut icon"
+        href="data:image/png;base64,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" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<style>
+		body{background-color: #eff2f9;}
+		.iupload h3{color: #1b2d6b;font-size: 30px;font-weight: 700;}
+		.img-part{height:300px;width:300px;margin:0px auto;}
+		.image-part{height:300px;width:300px;border:1px solid #1b2d6b;}
+		.image-part img{position:absolute;height: 300px;width:300px;display:none;padding:5px;}
+		.image-part #video{display:block;height: 300px;width:300px;padding:5px;}
+		.res-part{border:1px solid #dedede;margin-left:20px;height: 310px;width:100%;padding:5px;margin:0px auto;overflow:auto;}
+		.res-part2{border:1px solid #dedede;height: 310px;width:100%;padding:5px;margin:0px auto;}
+		.resp-img{height: 298px;width: 233px;margin:0px auto;}
+		.jsonRes{margin-left:30px;}
+		#send{cursor:pointer;}
+		.btn-part{width:325px;}
+		textarea,
+		select,
+		.form-control,
+		.custom-select,
+		button.btn,
+		.btn-primary,
+		input[type="text"],
+		input[type="url"],
+		.uneditable-input{
+			border: 1px solid #363e75;
+			outline: 0 !important;
+			border-radius:0px;
+			box-shadow: none;
+		   -webkit-box-shadow: none;
+		   -moz-box-shadow: none;
+		   -moz-transition: none;
+		   -webkit-transition: none;
+		}
+		textarea:focus,
+		select:focus,
+		.form-control:focus,
+		.btn:focus,
+		.btn-primary:focus,
+		.custom-select:focus,
+		input[type="text"]:focus,
+		.uneditable-input:focus{
+			border: 1px solid #007bff;
+			outline: 0 !important;
+			border-radius:0px;
+			box-shadow: none;
+		   -webkit-box-shadow: none;
+		   -moz-box-shadow: none;
+		   -moz-transition: none;
+		   -webkit-transition: none;
+		}
+		#loading {
+			position: fixed;
+			left: 0px;
+			top: 0px;
+			width: 100%;
+			height: 100%;
+			z-index: 9999999999;
+			overflow: hidden;
+			background: rgba(255, 255, 255, 0.7);
+		}
+		.loader {
+			border: 8px solid #f3f3f3;
+			border-top: 8px solid #363e75;
+			border-radius: 50%;
+			width: 60px;
+			height: 60px;
+			left: 50%;
+			margin-left: -4em;
+			display: block;
+			animation: spin 2s linear infinite;
+		}
+		.loader,
+		.loader:after {display: block;position: absolute;top: 50%;margin-top: -4.05em;}
+		@keyframes spin {
+			0% {
+				transform: rotate(0deg);
+			}
+			100% {
+				transform: rotate(360deg);
+			}
+		}
+		.right-part{border:1px solid #dedede;padding:5px;}
+		.logo{position:absolute;right:0px;bottom:0px;margin-right:30px;margin-bottom:30px;}
+	</style>
 </head>
 <body>
-  <div class="stage">
-    <div class="card" id="appCard">
-      <header class="app-head">
-        <div>
-          <h1><i class="fa-solid fa-brain"></i>Chicken Disease</h1>
-          <div class="meta">Upload, drag-drop, or capture — then predict.</div>
-        </div>
+    <div class="main container">
+		<section class="iupload">
+			<h3 class="text-center py-4">Object Classification</h3>
+			<div class="row">
+				<div class="img-part col-md-6">
+					<div class="image-part">
+						<video autoplay id="video" poster="https://img.freepik.com/free-vector/group-young-people-posing-photo_52683-18824.jpg?size=338&ext=jpg"></video>
+						<img src="" id="photo">
+						<canvas style="display:none;" id="canvas"></canvas>
+					</div>
+					<div class="btn-part">
+						<form id="upload-data pt-3" class="">
+							<div class="input-group mt-3 row">
+								<button type="button" class="btn btn-primary col-md-5 col-xs-5 ml-3 mr-4" id="uload">Upload</button>
+								<button id="send" type="button" class="btn btn-success col-md-5 col-xs-5">Predict</button>
+							</div>
 
-        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px">
-          <div class="themes" title="Pick a theme">
-            <div class="swatch sw-A" data-theme="A" style="background:linear-gradient(135deg,#6a00ff,#00e0ff)"></div>
-            <div class="swatch sw-B" data-theme="B" style="background:linear-gradient(135deg,#ffd1f5,#cde6ff)"></div>
-            <div class="swatch sw-C" data-theme="C" style="background:linear-gradient(135deg,#0f62fe,#ff7a59)"></div>
-            <div class="swatch sw-D" data-theme="D" style="background:linear-gradient(135deg,#ff3b3b,#ffb11b)"></div>
-            <div class="swatch sw-E" data-theme="E" style="background:linear-gradient(135deg,#7f5af0,#ff7ab6)"></div>
-          </div>
-          <div style="display:flex;gap:8px; align-items:center;">
-            <div class="tiny">Theme</div>
-            <div class="tiny" id="themeName">Colorful</div>
-          </div>
-        </div>
-      </header>
 
-      <div class="row">
-        <!-- Left: preview & controls -->
-        <div class="col" style="flex:0 1 48%;">
-          <div id="dropZone" class="preview" tabindex="0" aria-label="Image drop zone">
-            <div class="placeholder" id="placeText">
-              <i class="fa-regular fa-image" style="font-size:34px;color:var(--brand);"></i>
-              <div style="height:8px"></div>
-              <div><strong>Pick an image</strong></div>
-              <div class="muted tiny">Drag & drop, Upload, or use Camera</div>
-            </div>
-            <video id="video" autoplay playsinline style="display:none"></video>
-            <img id="photo" alt="Selected" style="display:none" />
-            <canvas id="canvas" style="display:none"></canvas>
-          </div>
 
-          <div class="controls">
-            <label class="btn btn-outline" id="uploadBtn"><i class="fa-solid fa-upload"></i> Upload
-              <input id="fileinput" accept="image/*" type="file" style="display:none" />
-            </label>
 
-            <button class="btn btn-primary" id="cameraBtn"><i class="fa-solid fa-camera"></i> Camera</button>
-            <button class="btn btn-accent" id="captureBtn" disabled><i class="fa-solid fa-circle-nodes"></i> Capture</button>
-            <button class="btn btn-outline" id="clearBtn" disabled><i class="fa-solid fa-trash"></i> Clear</button>
-            <div style="flex:1"></div>
-            <button class="btn btn-primary" id="predictBtn" disabled><i class="fa-solid fa-magnifying-glass"></i> Predict</button>
-          </div>
 
-          <div style="display:flex;gap:8px;margin-top:10px;align-items:center;flex-wrap:wrap">
-            <div class="tiny">Endpoint:</div>
-            <div class="tiny" id="endpointDisplay">../predict</div>
-            <input id="predictUrl" type="hidden" value="../predict" />
-            <div style="flex:1"></div>
-            <!-- Custom colors for E -->
-            <div id="customColors" style="display:none; gap:8px; align-items:center;">
-              <input type="color" id="customPrimary" title="Primary color" value="#7f5af0" />
-              <input type="color" id="customAccent" title="Accent color" value="#ff7ab6" />
-            </div>
-          </div>
-        </div>
 
-        <!-- Right: results -->
-        <div class="col" style="flex:0 1 50%;">
-          <div class="result">
-            <div style="display:flex;justify-content:space-between;align-items:center;">
-              <div>
-                <strong>Predictions</strong>
-                <div class="tiny muted">Top classes & confidence</div>
-              </div>
-              <div id="statusSmall" class="tiny muted">Idle</div>
-            </div>
+							<!-- change url value  -->
 
-            <div id="predList" style="margin-top:12px">
-              <div class="muted">No prediction yet — add an image and press Predict.</div>
-            </div>
 
-            <div style="margin-top:12px">
-              <strong>Response</strong>
-              <div class="tiny muted">Raw JSON</div>
-              <pre id="rawJson" class="jsonRes">—</pre>
-            </div>
 
-            <div style="margin-top:10px;display:flex;align-items:center;gap:12px;">
-              <div class="tiny muted">Top confidence</div>
-              <div id="confValue" style="font-weight:700">—</div>
-              <div style="flex:1"></div>
-            </div>
-            <div style="height:12px;background:rgba(0,0,0,0.06);border-radius:8px;margin-top:8px;overflow:hidden;">
-              <div id="confFill" style="height:100%; width:0%; background:linear-gradient(90deg,var(--accent),var(--brand)); transition:width .6s ease;"></div>
-            </div>
 
-            <div class="footer" style="margin-top:14px;">
-              Copyright © 2025 | Rayhan Hussain - All Rights Reserved
-            </div>
-          </div>
-        </div>
-      </div>
-    </div> <!-- card -->
-  </div> <!-- stage -->
+							<input type="hidden" class="form-control mr-2" id="url" placeholder="Enter REST Api url..." value="../predict"/>
+							<input name="upload" type="file" id="fileinput" style="position:absolute;top:-500px;"/><br/>
+						</form>
+					</div>
+				</div>
+				<div class="col-md-6 col-xs-12 right-part">
+					<h5 class="mb-2"><center>Prediction Results</center></h5>
+					<div class="row">
+						<div class="res-part2 col-md-5 col-xs-12"></div>
+						<div class="res-part col-md-5 col-xs-12"><div class="jsonRes"></div></div>
+					</div>
+				</div>
+			</div>
+		</section>
+	</div>
 
-  <script>
-    (function(){
-      // Elements
-      const dropZone = document.getElementById('dropZone');
-      const fileInput = document.getElementById('fileinput');
-      const uploadBtn = document.getElementById('uploadBtn');
-      const cameraBtn = document.getElementById('cameraBtn');
-      const captureBtn = document.getElementById('captureBtn');
-      const clearBtn = document.getElementById('clearBtn');
-      const predictBtn = document.getElementById('predictBtn');
-      const video = document.getElementById('video');
-      const photo = document.getElementById('photo');
-      const canvas = document.getElementById('canvas');
-      const predList = document.getElementById('predList');
-      const rawJson = document.getElementById('rawJson');
-      const confFill = document.getElementById('confFill');
-      const confValue = document.getElementById('confValue');
-      const statusSmall = document.getElementById('statusSmall');
-      const themeName = document.getElementById('themeName');
-      const endpointDisplay = document.getElementById('endpointDisplay');
-      const predictUrlInput = document.getElementById('predictUrl');
-      const customColors = document.getElementById('customColors');
-      const customPrimary = document.getElementById('customPrimary');
-      const customAccent = document.getElementById('customAccent');
+	<img class="logo" src="" />
 
-      const swatches = document.querySelectorAll('.swatch');
 
-      let base64Image = '';
-      let cameraStream = null;
-      let isCameraActive = false;
-      let currentTheme = 'A';
-      const appCard = document.getElementById('appCard');
+<div id="loading"><div class="loader"></div></div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
-      // Initialize endpoint display
-      endpointDisplay.textContent = predictUrlInput.value || '../predict';
+<script>
+var mybtn = document.getElementById('startbtn');
+var myvideo = document.getElementById('video');
+var mycanvas = document.getElementById('canvas');
+var myphoto = document.getElementById('photo');
+var base_data = "";
 
-      // Theme handling
-      function applyTheme(t){
-        // remove existing theme classes
-        appCard.classList.remove('theme-A','theme-B','theme-C','theme-D','theme-E');
-        document.body.classList.remove('theme-A','theme-B','theme-C','theme-D','theme-E');
-        if(['A','B','C','D'].includes(t)){
-          document.body.classList.add('theme-' + t);
-          currentTheme = t;
-          themeName.textContent = {
-            A:'Neon Gradient (A)',
-            B:'Soft Pastel (B)',
-            C:'Material-ish (C)',
-            D:'Vibrant Multicolor (D)'
-          }[t];
-          customColors.style.display = 'none';
-        } else {
-          // custom E - dynamic CSS variables
-          document.body.classList.add('theme-E');
-          currentTheme = 'E';
-          themeName.textContent = 'Custom (E)';
-          customColors.style.display = 'flex';
-          applyCustomColors(customPrimary.value, customAccent.value);
-        }
-        // mark active swatch
-        swatches.forEach(s=> s.classList.toggle('active', s.dataset.theme === t));
-      }
+function sendRequest(base64Data){
+	var type = "json";
+	if(base64Data != "" || base64Data != null){
+		if(type == "imgtobase"){
+			$(".res-part").html("");
+			$(".res-part").html(base64Data);
+		}
+		else if(type == "basetoimg"){
+			var imageData = $("#imgstring").val();
+			$(".res-part").html("");
+			$(".res-part").append("<img src='data:image/jpeg;base64," + imageData + "' alt='' />");
+		}
+		else{
+			var url = $("#url").val();
+			$("#loading").show();
+			$.ajax({
+				url : url,
+				type: "post",
+				cache: false,
+				async: true,
+				crossDomain: true,
+				headers: {
+					'Content-Type': 'application/json',
+					'Access-Control-Allow-Origin':'*'
+				},
+				data:JSON.stringify({image:base64Data}),
+				success: function(res){
+					$(".res-part").html("");
+					$(".res-part2").html("");
+					try{
+						var imageData = res[1].image;
+						if(imageData.length > 100){
+							if(imageData.length > 10){$(".res-part2").append("<img class='resp-img' src='data:image/jpeg;base64," + imageData + "' alt='' />");}
+						}
+					}catch(e){}
+					$(".res-part").html("<pre>" + JSON.stringify(res[0], undefined, 2) + "</pre>");
+					$("#loading").hide();
+				}
+			});
+		}
+	}
+}
 
-      function applyCustomColors(primary, accent){
-        document.documentElement.style.setProperty('--brand', primary);
-        document.documentElement.style.setProperty('--accent', accent);
-      }
+$(document).ready(function(){
+	$("#loading").hide();
 
-      swatches.forEach(s=>{
-        s.addEventListener('click', ()=> {
-          const t = s.dataset.theme;
-          applyTheme(t);
-        });
-      });
+	$('#send').click(function(evt){
+		sendRequest(base_data);
+    });
 
-      customPrimary.addEventListener('input', ()=> {
-        applyCustomColors(customPrimary.value, customAccent.value);
-      });
-      customAccent.addEventListener('input', ()=> {
-        applyCustomColors(customPrimary.value, customAccent.value);
-      });
+    $('#uload').click(function(evt) {
+        $('#fileinput').focus().trigger('click');
+    });
+	$("#fileinput").change(function(){
+		if (this.files && this.files[0]){
+			var reader = new FileReader();
+			reader.onload = function (e){
+				var url = e.target.result;
+				var img = new Image();
+				img.crossOrigin = 'Anonymous';
+				img.onload = function(){
+					var canvas = document.createElement('CANVAS');
+					var ctx = canvas.getContext('2d');
+					canvas.height = this.height;
+					canvas.width = this.width;
+					ctx.drawImage(this, 0, 0);
+					base_data = canvas.toDataURL('image/jpeg', 1.0).replace(/^data:image.+;base64,/, '');
+					canvas = null;
+				};
+				img.src = url;
+				$('#photo').attr('src', url);
+				$('#photo').show();
+				$('#video').hide();
+			}
+			reader.readAsDataURL(this.files[0]);
+		}
+	});
+});
 
-      // default theme
-      applyTheme('A');
-
-      // File upload & drag-drop
-      uploadBtn.addEventListener('click', ()=> fileInput.click());
-      fileInput.addEventListener('change', async (e) => {
-        const f = e.target.files && e.target.files[0];
-        if(f) await handleFile(f);
-        fileInput.value = '';
-      });
-
-      ['dragenter','dragover'].forEach(ev => {
-        dropZone.addEventListener(ev, e => { e.preventDefault(); e.stopPropagation(); dropZone.classList.add('drag-over'); });
-      });
-      ['dragleave','drop'].forEach(ev => {
-        dropZone.addEventListener(ev, e => { e.preventDefault(); e.stopPropagation(); dropZone.classList.remove('drag-over'); });
-      });
-      dropZone.addEventListener('drop', async (e) => {
-        const f = e.dataTransfer.files && e.dataTransfer.files[0];
-        if(f) await handleFile(f);
-      });
-
-      async function handleFile(file){
-        const allowed = ['image/jpeg','image/png','image/webp'];
-        if(!allowed.includes(file.type)){
-          alert('Use JPG/PNG/WebP images.');
-          return;
-        }
-        try {
-          const dataUrl = await readFileAsDataURL(file);
-          const img = new Image();
-          img.onload = function(){
-            // optional resize
-            const MAX = 1400;
-            let w = img.naturalWidth, h = img.naturalHeight;
-            if(w > MAX || h > MAX){
-              const ratio = Math.max(w / MAX, h / MAX);
-              w = Math.round(w / ratio);
-              h = Math.round(h / ratio);
-            }
-            canvas.width = w; canvas.height = h;
-            const ctx = canvas.getContext('2d');
-            ctx.drawImage(img, 0, 0, w, h);
-            const jpegData = canvas.toDataURL('image/jpeg', 0.92);
-            base64Image = jpegData.replace(/^data:image\/[^;]+;base64,/, '');
-            showImage();
-          };
-          img.crossOrigin = 'anonymous';
-          img.src = dataUrl;
-        } catch(err){
-          console.error(err);
-          alert('Failed to read file.');
-        }
-      }
-
-      function readFileAsDataURL(file){
-        return new Promise((res, rej) => {
-          const r = new FileReader();
-          r.onload = e => res(e.target.result);
-          r.onerror = rej;
-          r.readAsDataURL(file);
-        });
-      }
-
-      function showImage(){
-        photo.src = 'data:image/jpeg;base64,' + base64Image;
-        photo.style.display = 'block';
-        video.style.display = 'none';
-        document.getElementById('placeText').style.display = 'none';
-        predictBtn.disabled = false;
-        clearBtn.disabled = false;
-        captureBtn.disabled = true;
-        statusSmall.textContent = 'Ready';
-      }
-
-      // Camera
-      cameraBtn.addEventListener('click', async ()=>{
-        if(isCameraActive) {
-          stopCamera();
-          return;
-        }
-        try {
-          cameraStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' }, audio: false });
-          video.srcObject = cameraStream;
-          video.style.display = 'block';
-          photo.style.display = 'none';
-          document.getElementById('placeText').style.display = 'none';
-          isCameraActive = true;
-          captureBtn.disabled = false;
-          predictBtn.disabled = true;
-          statusSmall.textContent = 'Camera';
-        } catch(err){
-          console.warn(err);
-          alert('Unable to access camera: ' + (err.message || err));
-        }
-      });
-
-      function stopCamera(){
-        if(cameraStream){
-          cameraStream.getTracks().forEach(t=>t.stop());
-          cameraStream = null;
-        }
-        video.style.display = 'none';
-        isCameraActive = false;
-        captureBtn.disabled = true;
-        statusSmall.textContent = 'Idle';
-      }
-
-      captureBtn.addEventListener('click', ()=>{
-        if(!isCameraActive) return;
-        const w = video.videoWidth, h = video.videoHeight;
-        canvas.width = w; canvas.height = h;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(video, 0, 0, w, h);
-        const jpegData = canvas.toDataURL('image/jpeg', 0.92);
-        base64Image = jpegData.replace(/^data:image\/[^;]+;base64,/, '');
-        showImage();
-        stopCamera();
-      });
-
-      clearBtn.addEventListener('click', ()=>{
-        base64Image = '';
-        photo.src = '';
-        photo.style.display = 'none';
-        document.getElementById('placeText').style.display = 'block';
-        predictBtn.disabled = true;
-        clearBtn.disabled = true;
-        predList.innerHTML = '<div class="muted">No prediction yet — add an image and press Predict.</div>';
-        rawJson.textContent = '—';
-        confFill.style.width = '0%';
-        confValue.textContent = '—';
-      });
-
-      // Predict
-      predictBtn.addEventListener('click', async ()=>{
-        if(!base64Image) return alert('Please add an image first.');
-        setBusy(true);
-        try {
-          const url = predictUrlInput.value || '../predict';
-          statusSmall.textContent = 'Requesting...';
-          const resp = await fetch(url, {
-            method:'POST',
-            headers: { 'Content-Type':'application/json' },
-            body: JSON.stringify({ image: base64Image })
-          });
-          if(!resp.ok){
-            const txt = await resp.text().catch(()=> '');
-            throw new Error('Server: ' + resp.status + (txt ? (' — ' + txt) : ''));
-          }
-          const json = await resp.json().catch(()=> null);
-          rawJson.textContent = JSON.stringify(json, null, 2);
-          processResponse(json);
-          statusSmall.textContent = 'Done';
-        } catch(err){
-          console.error(err);
-          alert('Prediction failed: ' + (err.message || err));
-          statusSmall.textContent = 'Error';
-        } finally {
-          setBusy(false);
-        }
-      });
-
-      function setBusy(on){
-        predictBtn.disabled = on;
-        uploadBtn.querySelector('input').disabled = on;
-        cameraBtn.disabled = on;
-        captureBtn.disabled = on || !isCameraActive;
-        clearBtn.disabled = on;
-      }
-
-      function processResponse(json){
-        // try multiple shapes
-        let preds = [];
-        if(Array.isArray(json) && json.length){
-          // if first element is list of preds
-          if(Array.isArray(json[0])) preds = json[0];
-          else if(json[0] && json[0].predictions) preds = json[0].predictions;
-          else if(json[0] && typeof json[0] === 'object') {
-            preds = Object.entries(json[0]).map(([k,v]) => ({ label:k, score: (typeof v === 'number' ? v : (v.score||v.confidence||0)) }));
-          }
-        } else if(json && json.predictions) preds = json.predictions;
-        else if(json && (json.label || json.class || json.pred)) {
-          preds = [{ label: json.label || json.class || json.pred, score: json.score || json.confidence || 1 }];
-        } else if(json && typeof json === 'object'){
-          preds = Object.entries(json).map(([k,v]) => ({ label:k, score: (typeof v === 'number' ? v : (v.score||v.confidence||0)) }));
-        }
-
-        // normalize
-        preds = (preds || []).map(p => {
-          const score = (p.score !== undefined) ? Number(p.score) : (p.prob !== undefined ? Number(p.prob) : 0);
-          return { label: p.label || p.name || 'unknown', score: isNaN(score) ? 0 : score };
-        }).sort((a,b)=> b.score - a.score).slice(0,6);
-
-        if(preds.length){
-          predList.innerHTML = '';
-          preds.forEach((p, i) => {
-            const pct = Math.round((p.score || 0) * 100);
-            const div = document.createElement('div');
-            div.className = 'pred-item';
-            div.innerHTML = `<div style="font-weight:600">${i+1}. ${escapeHtml(p.label)}</div>
-              <div style="display:flex;align-items:center;gap:8px;">
-                <div class="bar"><div class="bar-fill" style="width:${pct}%"></div></div>
-                <div style="width:36px;text-align:right;font-weight:700">${pct}%</div>
-              </div>`;
-            predList.appendChild(div);
-          });
-          const top = preds[0];
-          const topPct = Math.round((top.score || 0) * 100);
-          confFill.style.width = topPct + '%';
-          confValue.textContent = topPct + '% — ' + top.label;
-        } else {
-          predList.innerHTML = '<div class="muted">Model returned no recognizable predictions. See raw JSON.</div>';
-          confFill.style.width = '0%';
-          confValue.textContent = '—';
-        }
-      }
-
-      function escapeHtml(s){
-        if(!s) return '';
-        return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-      }
-
-      // keyboard: Enter opens file
-      dropZone.addEventListener('keydown', (e) => { if(e.key === 'Enter' || e.key === ' ') fileInput.click(); });
-
-      // cleanup
-      window.addEventListener('beforeunload', ()=> {
-        if(cameraStream) cameraStream.getTracks().forEach(t=>t.stop());
-      });
-
-      // init small
-      setBusy(false);
-      statusSmall.textContent = 'Idle';
-
-    })();
-  </script>
+</script>
 </body>
 </html>
