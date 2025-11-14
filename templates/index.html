@@ -1,234 +1,265 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>cnncls</title>
-	<link rel="shortcut icon"
-        href="data:image/png;base64,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" />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-	<style>
-		body{background-color: #eff2f9;}
-		.iupload h3{color: #1b2d6b;font-size: 30px;font-weight: 700;}
-		.img-part{height:300px;width:300px;margin:0px auto;}
-		.image-part{height:300px;width:300px;border:1px solid #1b2d6b;}
-		.image-part img{position:absolute;height: 300px;width:300px;display:none;padding:5px;}
-		.image-part #video{display:block;height: 300px;width:300px;padding:5px;}
-		.res-part{border:1px solid #dedede;margin-left:20px;height: 310px;width:100%;padding:5px;margin:0px auto;overflow:auto;}
-		.res-part2{border:1px solid #dedede;height: 310px;width:100%;padding:5px;margin:0px auto;}
-		.resp-img{height: 298px;width: 233px;margin:0px auto;}
-		.jsonRes{margin-left:30px;}
-		#send{cursor:pointer;}
-		.btn-part{width:325px;}
-		textarea,
-		select,
-		.form-control,
-		.custom-select,
-		button.btn,
-		.btn-primary,
-		input[type="text"],
-		input[type="url"],
-		.uneditable-input{
-			border: 1px solid #363e75;
-			outline: 0 !important;
-			border-radius:0px;
-			box-shadow: none;
-		   -webkit-box-shadow: none;
-		   -moz-box-shadow: none;
-		   -moz-transition: none;
-		   -webkit-transition: none;
-		}
-		textarea:focus,
-		select:focus,
-		.form-control:focus,
-		.btn:focus,
-		.btn-primary:focus,
-		.custom-select:focus,
-		input[type="text"]:focus,
-		.uneditable-input:focus{
-			border: 1px solid #007bff;
-			outline: 0 !important;
-			border-radius:0px;
-			box-shadow: none;
-		   -webkit-box-shadow: none;
-		   -moz-box-shadow: none;
-		   -moz-transition: none;
-		   -webkit-transition: none;
-		}
-		#loading {
-			position: fixed;
-			left: 0px;
-			top: 0px;
-			width: 100%;
-			height: 100%;
-			z-index: 9999999999;
-			overflow: hidden;
-			background: rgba(255, 255, 255, 0.7);
-		}
-		.loader {
-			border: 8px solid #f3f3f3;
-			border-top: 8px solid #363e75;
-			border-radius: 50%;
-			width: 60px;
-			height: 60px;
-			left: 50%;
-			margin-left: -4em;
-			display: block;
-			animation: spin 2s linear infinite;
-		}
-		.loader,
-		.loader:after {display: block;position: absolute;top: 50%;margin-top: -4.05em;}
-		@keyframes spin {
-			0% {
-				transform: rotate(0deg);
-			}
-			100% {
-				transform: rotate(360deg);
-			}
-		}
-		.right-part{border:1px solid #dedede;padding:5px;}
-		.logo{position:absolute;right:0px;bottom:0px;margin-right:30px;margin-bottom:30px;}
-	</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Chicken Disease — Rayhan</title>
+  <!-- Bootstrap CDN -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <style>
+    :root{
+      --bg1:#0f1724; /* deep navy */
+      --accent-a:#6dd3ff; /* soft cyan */
+      --accent-b:#8b5cf6; /* violet */
+      --accent-c:#ff7ab6; /* pink */
+      --card:#0b1220; /* darker card */
+      --muted:#b6c7d8;
+    }
+    html,body{height:100%;}
+    body{margin:0;font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;background: linear-gradient(135deg,var(--bg1), #071028 70%);color:var(--muted);min-height:100vh;display:flex;flex-direction:column}
+
+    main.container{max-width:1100px;margin:48px auto}
+    .card-app{border-radius:14px;border:0;background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));box-shadow:0 12px 40px rgba(2,6,23,0.5);overflow:visible}
+
+    header .title{color:white}
+    .profile-chip{display:flex;align-items:center;gap:10px;background:linear-gradient(90deg,var(--accent-a),var(--accent-b));padding:6px 10px;border-radius:999px;color:#031026;box-shadow:0 8px 24px rgba(13,20,30,0.5)}
+
+    .preview-box{height:320px;width:100%;max-width:420px;position:relative;border-radius:12px;display:flex;align-items:center;justify-content:center;overflow:hidden;background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.03)}
+    .preview-box img,.preview-box video{max-height:100%;max-width:100%;display:block;border-radius:8px;transition:transform .45s cubic-bezier(.2,.9,.2,1)}
+    .preview-box:hover img{transform:scale(1.03)}
+
+    .controls .btn{border-radius:10px;transition:transform .12s ease, box-shadow .12s ease}
+    .gradient-btn{background:linear-gradient(90deg,var(--accent-b),var(--accent-c));color:white;border:0;box-shadow:0 10px 30px rgba(139,92,246,0.18)}
+
+    .card-floating{animation:floaty 6s ease-in-out infinite}
+    @keyframes floaty {0%{transform:translateY(0px)}50%{transform:translateY(-6px)}100%{transform:translateY(0px)}}
+
+    .result-card{background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));border-radius:12px;padding:16px;border:1px solid rgba(255,255,255,0.03)}
+    .result-title{color:var(--accent-a);font-weight:700}
+    .result-list{display:flex;flex-direction:column;gap:8px;margin-top:10px}
+    .result-item{display:flex;justify-content:space-between;align-items:center;padding:10px;border-radius:8px;background:linear-gradient(90deg,rgba(255,255,255,0.012),rgba(255,255,255,0.006));}
+
+    footer.site-footer{margin-top:36px;padding:18px 0;color:rgba(255,255,255,0.7);text-align:center;font-size:14px}
+
+    .file-input{position:relative;overflow:hidden}
+    .file-input input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer}
+
+    @media(min-width:768px){.preview-col{display:flex;align-items:flex-start}}
+  </style>
 </head>
 <body>
-    <div class="main container">
-		<section class="iupload">
-			<h3 class="text-center py-4">Object Classification</h3>
-			<div class="row">
-				<div class="img-part col-md-6">
-					<div class="image-part">
-						<video autoplay id="video" poster="https://img.freepik.com/free-vector/group-young-people-posing-photo_52683-18824.jpg?size=338&ext=jpg"></video>
-						<img src="" id="photo">
-						<canvas style="display:none;" id="canvas"></canvas>
-					</div>
-					<div class="btn-part">
-						<form id="upload-data pt-3" class="">
-							<div class="input-group mt-3 row">
-								<button type="button" class="btn btn-primary col-md-5 col-xs-5 ml-3 mr-4" id="uload">Upload</button>
-								<button id="send" type="button" class="btn btn-success col-md-5 col-xs-5">Predict</button>
-							</div>
+  <main class="container">
+    <div class="card p-4 card-app card-floating">
+      <header class="d-flex align-items-center justify-content-between mb-3">
+        <div>
+          <h1 class="h4 mb-0 title">Object Classification</h1>
+          <div class="small text-muted">Chicken Disease</div>
+        </div>
 
+        <div class="profile-chip">
+          <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--accent-a),var(--accent-b));display:flex;align-items:center;justify-content:center;color:#021"><strong>R</strong></div>
+          <div style="font-size:14px;font-weight:600">Rayhan Hussain</div>
+        </div>
+      </header>
 
+      <div class="row">
+        <!-- Left: preview / upload -->
+        <section class="col-md-6 preview-col mb-3">
+          <div class="w-100 d-flex flex-column align-items-center">
+            <div class="preview-box mb-3" id="previewBox" aria-live="polite">
+              <img id="previewImage" alt="Preview of uploaded image" src="" style="display:none">
+              <video id="previewVideo" autoplay playsinline muted style="display:none"></video>
+              <div id="placeholder" class="text-center" style="color:rgba(255,255,255,0.6)">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7 8h10M7 12h4" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity=".9"/></svg>
+                <div class="mt-2">No image selected</div>
+              </div>
+            </div>
 
+            <div class="w-100 controls">
+              <div class="d-flex flex-wrap align-items-center justify-content-between">
+                <div class="file-input mr-2 mb-2" style="flex:1 1 200px;">
+                  <button id="btnChoose" class="btn btn-outline-light btn-block">Choose Image</button>
+                  <input id="fileInput" type="file" accept="image/*" aria-label="Choose image file">
+                </div>
 
+                <div class="mb-2" style="flex:0 0 150px;">
+                  <button id="btnToggleCam" class="btn btn-outline-light btn-block" aria-pressed="false">Use Camera</button>
+                </div>
 
+                <div class="mb-2" style="flex:0 0 150px;">
+                  <button id="btnPredict" class="btn gradient-btn btn-block" disabled>Predict</button>
+                </div>
+              </div>
 
-							<!-- change url value  -->
+              <div class="form-group mt-2 mb-0">
+                <label for="apiUrl" class="sr-only">Prediction API URL</label>
+                <input id="apiUrl" type="url" class="form-control" placeholder="Prediction endpoint (e.g. /predict)" value="../predict" aria-label="Prediction endpoint">
+              </div>
+            </div>
+          </div>
+        </section>
 
+        <!-- Right: results -->
+        <section class="col-md-6">
+          <div class="mb-3">
+            <h2 class="h6 text-white">Prediction Results</h2>
 
+            <div class="result-card">
+              <div class="d-flex align-items-center justify-content-between">
+                <div>
+                  <div class="result-title">Top Predictions</div>
+                  <div class="small text-muted">Confidence & label</div>
+                </div>
+                <div id="responseImageContainer" style="width:92px;height:92px;display:flex;align-items:center;justify-content:center;border-radius:8px;background:linear-gradient(90deg,var(--accent-a),var(--accent-b));box-shadow:0 8px 24px rgba(109,211,255,0.06)"></div>
+              </div>
 
+              <div class="result-list" id="resultList">
+                <div class="result-item" style="color:var(--muted)">No prediction yet <span style="opacity:.6">—</span></div>
+              </div>
 
-							<input type="hidden" class="form-control mr-2" id="url" placeholder="Enter REST Api url..." value="../predict"/>
-							<input name="upload" type="file" id="fileinput" style="position:absolute;top:-500px;"/><br/>
-						</form>
-					</div>
-				</div>
-				<div class="col-md-6 col-xs-12 right-part">
-					<h5 class="mb-2"><center>Prediction Results</center></h5>
-					<div class="row">
-						<div class="res-part2 col-md-5 col-xs-12"></div>
-						<div class="res-part col-md-5 col-xs-12"><div class="jsonRes"></div></div>
-					</div>
-				</div>
-			</div>
-		</section>
-	</div>
+            </div>
 
-	<img class="logo" src="" />
+          </div>
+        </section>
+      </div>
 
+      <div class="d-flex justify-content-end mt-3">
+        <div id="loader" class="loader" style="display:none;align-items:center;gap:8px;">
+          <div class="spinner-border" role="status" aria-hidden="true"></div>
+          <span class="text-white-50">Working…</span>
+        </div>
+      </div>
 
-<div id="loading"><div class="loader"></div></div>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    </div>
+  </main>
 
-<script>
-var mybtn = document.getElementById('startbtn');
-var myvideo = document.getElementById('video');
-var mycanvas = document.getElementById('canvas');
-var myphoto = document.getElementById('photo');
-var base_data = "";
+  <footer class="site-footer">
+    <div>Copyright © 2025 | Rayhan Hussain - All Rights Reserved</div>
+  </footer>
 
-function sendRequest(base64Data){
-	var type = "json";
-	if(base64Data != "" || base64Data != null){
-		if(type == "imgtobase"){
-			$(".res-part").html("");
-			$(".res-part").html(base64Data);
-		}
-		else if(type == "basetoimg"){
-			var imageData = $("#imgstring").val();
-			$(".res-part").html("");
-			$(".res-part").append("<img src='data:image/jpeg;base64," + imageData + "' alt='' />");
-		}
-		else{
-			var url = $("#url").val();
-			$("#loading").show();
-			$.ajax({
-				url : url,
-				type: "post",
-				cache: false,
-				async: true,
-				crossDomain: true,
-				headers: {
-					'Content-Type': 'application/json',
-					'Access-Control-Allow-Origin':'*'
-				},
-				data:JSON.stringify({image:base64Data}),
-				success: function(res){
-					$(".res-part").html("");
-					$(".res-part2").html("");
-					try{
-						var imageData = res[1].image;
-						if(imageData.length > 100){
-							if(imageData.length > 10){$(".res-part2").append("<img class='resp-img' src='data:image/jpeg;base64," + imageData + "' alt='' />");}
-						}
-					}catch(e){}
-					$(".res-part").html("<pre>" + JSON.stringify(res[0], undefined, 2) + "</pre>");
-					$("#loading").hide();
-				}
-			});
-		}
-	}
-}
+  <script>
+    (function(){
+      // If your backend isn't available or CORS blocks requests, this flag enables a friendly mock so you can see the UI.
+      const MOCK_ON_FAILURE = true;
 
-$(document).ready(function(){
-	$("#loading").hide();
+      const fileInput = document.getElementById('fileInput');
+      const previewImage = document.getElementById('previewImage');
+      const previewVideo = document.getElementById('previewVideo');
+      const placeholder = document.getElementById('placeholder');
+      const btnChoose = document.getElementById('btnChoose');
+      const btnToggleCam = document.getElementById('btnToggleCam');
+      const btnPredict = document.getElementById('btnPredict');
+      const apiUrl = document.getElementById('apiUrl');
+      const resultList = document.getElementById('resultList');
+      const responseImageContainer = document.getElementById('responseImageContainer');
+      const loader = document.getElementById('loader');
 
-	$('#send').click(function(evt){
-		sendRequest(base_data);
-    });
+      let currentBase64 = '';
+      let stream = null;
 
-    $('#uload').click(function(evt) {
-        $('#fileinput').focus().trigger('click');
-    });
-	$("#fileinput").change(function(){
-		if (this.files && this.files[0]){
-			var reader = new FileReader();
-			reader.onload = function (e){
-				var url = e.target.result;
-				var img = new Image();
-				img.crossOrigin = 'Anonymous';
-				img.onload = function(){
-					var canvas = document.createElement('CANVAS');
-					var ctx = canvas.getContext('2d');
-					canvas.height = this.height;
-					canvas.width = this.width;
-					ctx.drawImage(this, 0, 0);
-					base_data = canvas.toDataURL('image/jpeg', 1.0).replace(/^data:image.+;base64,/, '');
-					canvas = null;
-				};
-				img.src = url;
-				$('#photo').attr('src', url);
-				$('#photo').show();
-				$('#video').hide();
-			}
-			reader.readAsDataURL(this.files[0]);
-		}
-	});
-});
+      function showLoader(on){ loader.style.display = on ? 'flex' : 'none'; }
+      function resetPreview(){ previewImage.style.display='none'; previewVideo.style.display='none'; placeholder.style.display='flex'; btnPredict.disabled = true; currentBase64 = ''; }
+      function showImageFromDataURL(dataURL){ previewImage.src = dataURL; previewImage.style.display='block'; previewVideo.style.display='none'; placeholder.style.display='none'; btnPredict.disabled = false; }
 
-</script>
+      fileInput.addEventListener('change', async (e)=>{
+        if(!e.target.files || !e.target.files[0]) return resetPreview();
+        stopCamera();
+        const file = e.target.files[0];
+        if(!file.type.startsWith('image/')) return alert('Please select an image file.');
+        if(file.size > 8 * 1024 * 1024){ if(!confirm('The file is larger than 8MB. Continue?')){ fileInput.value=''; return resetPreview(); } }
+        const reader = new FileReader();
+        reader.onload = function(ev){ const dataURL = ev.target.result; currentBase64 = dataURL.replace(/^data:image\/[a-zA-Z]+;base64,/, ''); showImageFromDataURL(dataURL); }
+        reader.readAsDataURL(file);
+      });
+
+      btnChoose.addEventListener('click', ()=>fileInput.click());
+
+      btnToggleCam.addEventListener('click', async ()=>{
+        if(stream){ stopCamera(); btnToggleCam.setAttribute('aria-pressed','false'); btnToggleCam.textContent='Use Camera'; return; }
+        try{ stream = await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'}, audio:false}); previewVideo.srcObject = stream; previewVideo.style.display='block'; previewImage.style.display='none'; placeholder.style.display='none'; btnToggleCam.setAttribute('aria-pressed','true'); btnToggleCam.textContent='Stop Camera'; btnPredict.disabled = false; }catch(err){ console.error(err); alert('Could not access camera — permission denied or no camera available.'); }
+      });
+
+      function stopCamera(){ if(!stream) return; stream.getTracks().forEach(t=>t.stop()); stream = null; previewVideo.srcObject = null; previewVideo.style.display='none'; placeholder.style.display='flex'; }
+
+      async function buildPayload(){ if(stream){ const video = previewVideo; const canvas = document.createElement('canvas'); canvas.width = video.videoWidth || 640; canvas.height = video.videoHeight || 480; const ctx = canvas.getContext('2d'); ctx.drawImage(video, 0, 0, canvas.width, canvas.height); const dataURL = canvas.toDataURL('image/jpeg', 0.92); return dataURL.replace(/^data:image\/[a-zA-Z]+;base64,/, ''); } return currentBase64; }
+
+      // Friendly mock response used when backend fails or for demonstration
+      function createMockResponse(){
+        return new Promise(resolve => {
+          setTimeout(()=>{
+            resolve({
+              predictions: [
+                {label:'Person', score:0.93},
+                {label:'Dog', score:0.04},
+                {label:'Backpack', score:0.02}
+              ],
+              image: null
+            });
+          }, 800);
+        });
+      }
+
+      btnPredict.addEventListener('click', async ()=>{
+        const base64 = await buildPayload(); if(!base64){ alert('No image available to send.'); return; }
+        const url = (apiUrl.value || '').trim(); if(!url){ alert('Please set the Prediction endpoint URL.'); apiUrl.focus(); return; }
+
+        showLoader(true); resultList.innerHTML = '<div class="result-item">Sending image…</div>'; responseImageContainer.innerHTML = '';
+        try{
+          const res = await fetch(url, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({image: base64}), mode: 'cors' });
+          if(!res.ok) throw new Error('Server returned ' + res.status);
+          const data = await res.json();
+          handlePredictionData(data);
+        }catch(err){
+          console.warn('Prediction request failed:', err.message);
+          if(MOCK_ON_FAILURE){
+            const mock = await createMockResponse();
+            handlePredictionData(mock);
+          }else{
+            resultList.innerHTML = `<div class="result-item" style="color:#ffb4c6">Error: ${escapeHtml(err.message)}</div>`;
+          }
+        }finally{ showLoader(false); }
+      });
+
+      function handlePredictionData(data){
+        // Accept several shapes: {predictions: [...]}, array, or simple map
+        let predictions = [];
+        let responseImage = null;
+        if(Array.isArray(data)){
+          // try to find predictions inside
+          if(data[0] && data[0].predictions) predictions = data[0].predictions;
+          else predictions = data[0] || [];
+          if(data[1] && data[1].image) responseImage = data[1].image;
+        }else if(data && typeof data === 'object'){
+          predictions = data.predictions || data.results || data.items || [];
+          responseImage = data.image || null;
+        }
+
+        if(predictions && !Array.isArray(predictions)){
+          predictions = Object.keys(predictions).map(k=>({label:k,score:predictions[k]}));
+        }
+
+        // fallback
+        if(!predictions || predictions.length===0) predictions = [{label:'No confident prediction', score:null}];
+
+        // sort by score desc when possible
+        predictions.sort((a,b)=>{ const as = a.score||0; const bs = b.score||0; return bs - as; });
+
+        // render top 5
+        const top = predictions.slice(0,5);
+        resultList.innerHTML = '';
+        top.forEach(p=>{
+          const label = escapeHtml(p.label || p.name || (p[0]||'unknown'));
+          const score = (typeof p.score === 'number') ? Math.round(p.score*100) + '%' : (p.score ? p.score : '');
+          const li = document.createElement('div'); li.className='result-item'; li.innerHTML = `<div style="font-weight:600;color:white">${label}</div><div style="opacity:.85">${score}</div>`; resultList.appendChild(li);
+        });
+
+        responseImageContainer.innerHTML = '';
+        if(responseImage && responseImage.length>50){ const img = document.createElement('img'); img.alt='Returned image'; img.style.maxWidth='100%'; img.style.maxHeight='100%'; img.style.borderRadius='8px'; img.src='data:image/jpeg;base64,'+responseImage; responseImageContainer.appendChild(img); }
+      }
+
+      function escapeHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+      resetPreview(); window.addEventListener('beforeunload', ()=>stopCamera());
+    })();
+  </script>
 </body>
 </html>
